@@ -70,8 +70,11 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add('-parameters')
 }
 
-task stage(dependsOn: ['build', 'clean'])
-build.mustRunAfter clean
+task stage {
+    dependsOn "build"
+    dependsOn "clean"
+    build.mustRunAfter "clean"
+}
 
 shadowJar {
     mergeServiceFiles()
