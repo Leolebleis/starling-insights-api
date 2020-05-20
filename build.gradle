@@ -60,7 +60,7 @@ dependencies {
 
 test.classpath += configurations.developmentOnly
 
-mainClassName = "starling.insights.api.Application"
+mainClassName = "starling.insights.Application"
 // use JUnit 5 platform
 test {
     useJUnitPlatform()
