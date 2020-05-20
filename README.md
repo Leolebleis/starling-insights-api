@@ -4,6 +4,19 @@
 
 > An API using micronaut that interacts with my banking data and sends html email with breakdowns of my spendings.
 
+## Run it
+
+`./gradlew run` to run the app.
+
+You will need a Starling personal token and Gmail API credentials.
+
+[Deploy Micronaut apps on Heroku using:](https://maccoda.github.io/deploying-micronaut-heroku/)
+```
+./gradlew stage
+heroku container:push web
+heroku container:release web
+```
+
 ## Author
 
 👤 **Leo Le Bleis**
