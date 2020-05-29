@@ -6,17 +6,16 @@ import io.reactivex.Single;
 import lombok.extern.slf4j.Slf4j;
 import starling.insights.api.client.StarlingClient;
 import starling.insights.api.model.Account;
-import starling.insights.api.model.Date;
 import starling.insights.api.model.InsightsCategory;
 import starling.insights.api.model.InsightsCounterParty;
 import starling.insights.api.service.StarlingAccountService;
 
 import javax.inject.Inject;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static io.micronaut.http.HttpHeaders.AUTHORIZATION;
-import static starling.insights.api.service.StarlingAccountService.Month;
-
 
 @Controller
 @Slf4j
@@ -62,15 +61,15 @@ public class InsightsController {
                                                                                           @QueryValue("secondYear") String secondYear,
                                                                                           @PathVariable("accountID") String accountID) {
 
-        ArrayList<Date> listOfDates = starlingAccountService.getMonthsInBetween(Month.valueOf(firstMonth.toUpperCase()),
+        HashMap<Month, Integer> listOfDates = starlingAccountService.getMonthsInBetween(Month.valueOf(firstMonth.toUpperCase()),
                 Integer.parseInt(firstYear), Month.valueOf(secondMonth.toUpperCase()), Integer.parseInt(secondYear));
 
         ArrayList<InsightsCounterParty> insightsCounterParties = new ArrayList<>() {
             {
-                for (Date date : listOfDates) {
-                    InsightsCounterParty monthlyInsight = starlingClient.getInsightsCounterParty(auth, accountID, date.getMonth().toString(), Integer.toString(date.getYear())).getBody().get();
+                listOfDates.forEach((month, year) -> {
+                    InsightsCounterParty monthlyInsight = starlingClient.getInsightsCounterParty(auth, accountID, month.toString(), year.toString()).getBody().get();
                     add(monthlyInsight);
-                }
+                });
             }
         };
 
@@ -85,15 +84,15 @@ public class InsightsController {
                                                                                   @QueryValue("secondYear") String secondYear,
                                                                                   @PathVariable("accountID") String accountID) {
 
-        ArrayList<Date> listOfDates = starlingAccountService.getMonthsInBetween(Month.valueOf(firstMonth.toUpperCase()),
+        HashMap<Month, Integer> listOfDates = starlingAccountService.getMonthsInBetween(Month.valueOf(firstMonth.toUpperCase()),
                 Integer.parseInt(firstYear), Month.valueOf(secondMonth.toUpperCase()), Integer.parseInt(secondYear));
 
         ArrayList<InsightsCategory> insightsCategories = new ArrayList<>() {
             {
-                for (Date date : listOfDates) {
-                    InsightsCategory monthlyInsight = starlingClient.getInsightsCategory(auth, accountID, date.getMonth().toString(), Integer.toString(date.getYear())).getBody().get();
+                listOfDates.forEach((month, year) -> {
+                    InsightsCategory monthlyInsight = starlingClient.getInsightsCategory(auth, accountID, month.toString(), year.toString()).getBody().get();
                     add(monthlyInsight);
-                }
+                });
             }
         };
 
