@@ -1,21 +1,22 @@
 package starling.insights.api.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.inject.Singleton;
 
-@Data
+@EqualsAndHashCode(callSuper = true)
 @Singleton
-public class InsightsCounterParty {
+@Data
+public class InsightsCounterParty extends InsightsObject {
 
-    private String period;
-    private int totalSpent;
-    private int totalReceived;
-    private int netSpend;
-    private int totalSpendNetOut;
-    private int totalReceivedNetIn;
-    private String currency;
-    private String direction;
-    private InsightsCounterPartyBreakdown[] breakdown;
+    InsightsCounterPartyBreakdown[] breakdown;
 
+    public InsightsCounterParty() {
+    }
+
+    public InsightsCounterParty(String period, int totalSpent, int totalReceived, int netSpend, int totalSpendNetOut, int totalReceivedNetIn, String currency, String direction, InsightsCounterPartyBreakdown[] breakdown) {
+        super(period, totalSpent, totalReceived, netSpend, totalSpendNetOut, totalReceivedNetIn, currency, direction);
+        this.breakdown = breakdown;
+    }
 }
