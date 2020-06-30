@@ -67,7 +67,8 @@ public class InsightsController {
         ArrayList<InsightsCounterParty> insightsCounterParties = new ArrayList<>() {
             {
                 listOfDates.forEach((date) -> {
-                    InsightsCounterParty monthlyInsight = starlingClient.getInsightsCounterParty(auth, accountID, date.getMonth().toString(), Integer.toString(date.getYear())).getBody().get();
+                    InsightsCounterParty monthlyInsight = starlingClient.getInsightsCounterParty(auth, accountID,
+                            date.getMonth().toString(), Integer.toString(date.getYear())).getBody().get();
                     add(monthlyInsight);
                 });
             }
@@ -90,7 +91,8 @@ public class InsightsController {
         ArrayList<InsightsCategory> insightsCategories = new ArrayList<>() {
             {
                 listOfDates.forEach((date) -> {
-                    InsightsCategory monthlyInsight = starlingClient.getInsightsCategory(auth, accountID, date.getMonth().toString(), Integer.toString(date.getYear())).getBody().get();
+                    InsightsCategory monthlyInsight = starlingClient.getInsightsCategory(auth, accountID,
+                            date.getMonth().toString(), Integer.toString(date.getYear())).getBody().get();
                     add(monthlyInsight);
                 });
             }
