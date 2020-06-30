@@ -25,15 +25,15 @@ public class InsightsControllerTest {
 
 
 
-    @Test
-    void testGetAccounts() {
-        HashMap<String, Account[]> body = new HashMap<>() {{
-            put("accounts", new Account[]{
-                    new Account(UUID.randomUUID(), UUID.randomUUID(), "GBP", "2018-03-20T14:25:37.200Z"),
-                    new Account(UUID.randomUUID(), UUID.randomUUID(), "EUR", "2018-03-20T14:25:37.200Z")
-            });
-        }};
-
-    }
+//    @Test
+//    void testGetAccounts() {
+//        HashMap<String, Account[]> body = new HashMap<>() {{
+//            put("accounts", new Account[]{
+//                    new Account(UUID.randomUUID(), UUID.randomUUID(), "GBP", "2018-03-20T14:25:37.200Z"),
+//                    new Account(UUID.randomUUID(), UUID.randomUUID(), "EUR", "2018-03-20T14:25:37.200Z")
+//            });
+//        }};
+//
+//    }
 
 }
