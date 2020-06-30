@@ -2,19 +2,28 @@
 <p>
 </p>
 
-> An API using micronaut that interacts with my banking data and sends html email with breakdowns of my spendings.
+> An API built with micronaut that interacts with my banking data, served with the Starling API. [This python script](https://github.com/Leolebleis/starling-insights-script) runs once a month and fetches all the data from this API, deployed on heroku using docker. This project was fun and is a good building block to build more API integration with Starling :).
 
 ## Run it
 
 `./gradlew run` to run the app.
 
-You will need a Starling personal token and Gmail API credentials.
+You will need a Starling personal token to go inside your `Authorization` header for your requests.
 
 [Deploy Micronaut apps on Heroku using:](https://maccoda.github.io/deploying-micronaut-heroku/)
 ```
 ./gradlew stage
 heroku container:push web
 heroku container:release web
+```
+
+Doing `./gradlew stage` meant adding this to `build.gradle`:
+```
+task stage {
+    dependsOn "build"
+    dependsOn "clean"
+    build.mustRunAfter "clean"
+}
 ```
 
 ## Author
