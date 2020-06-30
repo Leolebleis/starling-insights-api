@@ -11,9 +11,9 @@ import starling.insights.api.model.InsightsCounterParty;
 import starling.insights.api.service.StarlingAccountService;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static io.micronaut.http.HttpHeaders.AUTHORIZATION;
 
@@ -33,8 +33,8 @@ public class InsightsController {
     }
 
     @Get("/accounts")
-    public Account[] getAccounts(@Header(AUTHORIZATION) String auth) {
-        return starlingClient.getAccounts(auth).getBody().get().get("accounts");
+    public HttpResponse<Account[]> getAccounts(@Header(AUTHORIZATION) String auth) {
+        return HttpResponse.ok(starlingClient.getAccounts(auth).getBody().get().get("accounts"));
     }
 
     @Get("/accounts/{accountID}/spending-insights/counter-party")
@@ -54,49 +54,49 @@ public class InsightsController {
     }
 
     @Get("/accounts/{accountID}/spending-insights/counter-party/between-two-dates")
-    public Single<ArrayList<InsightsCounterParty>> getInsightsCounterPartyBetweenTwoDates(@Header(AUTHORIZATION) String auth,
-                                                                                          @QueryValue("firstMonth") String firstMonth,
-                                                                                          @QueryValue("firstYear") String firstYear,
-                                                                                          @QueryValue("secondMonth") String secondMonth,
-                                                                                          @QueryValue("secondYear") String secondYear,
-                                                                                          @PathVariable("accountID") String accountID) {
+    public HttpResponse<Single<ArrayList<InsightsCounterParty>>> getInsightsCounterPartyBetweenTwoDates(@Header(AUTHORIZATION) String auth,
+                                                                                                        @QueryValue("firstMonth") String firstMonth,
+                                                                                                        @QueryValue("firstYear") String firstYear,
+                                                                                                        @QueryValue("secondMonth") String secondMonth,
+                                                                                                        @QueryValue("secondYear") String secondYear,
+                                                                                                        @PathVariable("accountID") String accountID) {
 
-        HashMap<Month, Integer> listOfDates = starlingAccountService.getMonthsInBetween(Month.valueOf(firstMonth.toUpperCase()),
+        ArrayList<LocalDate> listOfDates = starlingAccountService.getMonthsInBetween(Month.valueOf(firstMonth.toUpperCase()),
                 Integer.parseInt(firstYear), Month.valueOf(secondMonth.toUpperCase()), Integer.parseInt(secondYear));
 
         ArrayList<InsightsCounterParty> insightsCounterParties = new ArrayList<>() {
             {
-                listOfDates.forEach((month, year) -> {
-                    InsightsCounterParty monthlyInsight = starlingClient.getInsightsCounterParty(auth, accountID, month.toString(), year.toString()).getBody().get();
+                listOfDates.forEach((date) -> {
+                    InsightsCounterParty monthlyInsight = starlingClient.getInsightsCounterParty(auth, accountID, date.getMonth().toString(), Integer.toString(date.getYear())).getBody().get();
                     add(monthlyInsight);
                 });
             }
         };
 
-        return Single.just(insightsCounterParties);
+        return HttpResponse.ok(Single.just(insightsCounterParties));
     }
 
     @Get("/accounts/{accountID}/spending-insights/spending-category/between-two-dates")
-    public Single<ArrayList<InsightsCategory>> getInsightsCategoryBetweenTwoDates(@Header(AUTHORIZATION) String auth,
-                                                                                  @QueryValue("firstMonth") String firstMonth,
-                                                                                  @QueryValue("firstYear") String firstYear,
-                                                                                  @QueryValue("secondMonth") String secondMonth,
-                                                                                  @QueryValue("secondYear") String secondYear,
-                                                                                  @PathVariable("accountID") String accountID) {
+    public HttpResponse<Single<ArrayList<InsightsCategory>>> getInsightsCategoryBetweenTwoDates(@Header(AUTHORIZATION) String auth,
+                                                                                                @QueryValue("firstMonth") String firstMonth,
+                                                                                                @QueryValue("firstYear") String firstYear,
+                                                                                                @QueryValue("secondMonth") String secondMonth,
+                                                                                                @QueryValue("secondYear") String secondYear,
+                                                                                                @PathVariable("accountID") String accountID) {
 
-        HashMap<Month, Integer> listOfDates = starlingAccountService.getMonthsInBetween(Month.valueOf(firstMonth.toUpperCase()),
+        ArrayList<LocalDate> listOfDates = starlingAccountService.getMonthsInBetween(Month.valueOf(firstMonth.toUpperCase()),
                 Integer.parseInt(firstYear), Month.valueOf(secondMonth.toUpperCase()), Integer.parseInt(secondYear));
 
         ArrayList<InsightsCategory> insightsCategories = new ArrayList<>() {
             {
-                listOfDates.forEach((month, year) -> {
-                    InsightsCategory monthlyInsight = starlingClient.getInsightsCategory(auth, accountID, month.toString(), year.toString()).getBody().get();
+                listOfDates.forEach((date) -> {
+                    InsightsCategory monthlyInsight = starlingClient.getInsightsCategory(auth, accountID, date.getMonth().toString(), Integer.toString(date.getYear())).getBody().get();
                     add(monthlyInsight);
                 });
             }
         };
 
-        return Single.just(insightsCategories);
+        return HttpResponse.ok(Single.just(insightsCategories));
     }
 
 }
